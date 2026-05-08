@@ -5,6 +5,10 @@ The classic bouncing DVD logo screensaver for macOS. The logo bounces around the
 ![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue)
 ![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange)
 
+<p align="center">
+  <video src="dvd.mp4" width="600" controls muted loop></video>
+</p>
+
 ## Features
 
 - Authentic DVD logo bouncing off screen edges
@@ -51,6 +55,7 @@ defaults delete com.kshitijsubedi.BouncingDVD
 BouncingDVD/
 ├── BouncingDVDView.swift   # ScreenSaverView subclass
 ├── DVD_logo.png            # DVD logo (transparent background)
+├── dvd.mp4                 # Preview video of the screensaver
 ├── Info.plist              # Bundle metadata
 ├── build.sh                # Build + ad-hoc codesign script
 └── README.md
