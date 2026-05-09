@@ -1,13 +1,12 @@
+
 # Bouncing DVD Screensaver
 
 The classic bouncing DVD logo screensaver for macOS. The logo bounces around the screen and changes color every time it hits an edge.
 
-![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue)
-![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange)
+![macOS](https://img.shields.io/badge/macOS-14.0%2B-blue?style=for-the-badge)
+![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange?style=for-the-badge)
 
-<p align="center">
-  <video src="dvd.mp4" width="600" controls muted loop></video>
-</p>
+https://github.com/user-attachments/assets/8a7f7062-1c7a-4ac4-8477-504f3bff0fb7
 
 ## Features
 
@@ -16,7 +15,6 @@ The classic bouncing DVD logo screensaver for macOS. The logo bounces around the
 - 60fps smooth animation with delta-time interpolation
 - Configurable logo size (0.5x–3.0x) and speed (0.5x–4.0x) via System Settings
 - Settings persist across sessions
-- Scales properly in preview thumbnails
 
 ## Requirements
 
@@ -26,7 +24,6 @@ The classic bouncing DVD logo screensaver for macOS. The logo bounces around the
 ## Build & Install
 
 ```bash
-git clone <repo-url> && cd BouncingDVD
 ./build.sh
 sudo cp -R build/BouncingDVD.saver /Library/Screen\ Savers/
 ```
