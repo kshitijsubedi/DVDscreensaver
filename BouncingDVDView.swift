@@ -12,6 +12,8 @@ final class BouncingDVDView: ScreenSaverView {
     private var lastFrameTime: TimeInterval = 0
     private var configWindow: NSWindow?
 
+    private static let targetFrameInterval: CGFloat = 1.0 / 60.0
+
     private let bundleID = "com.kshitijsubedi.BouncingDVD"
 
     private let palette: [NSColor] = [
@@ -74,15 +76,24 @@ final class BouncingDVDView: ScreenSaverView {
     }
 
     private func createTintedLogo(source: NSImage, color: NSColor) -> NSImage {
-        let size = source.size
-        let tinted = NSImage(size: size)
-        tinted.lockFocus()
-        color.setFill()
-        NSRect(origin: .zero, size: size).fill()
-        source.draw(in: NSRect(origin: .zero, size: size),
-                     from: .zero, operation: .destinationIn, fraction: 1.0)
-        tinted.unlockFocus()
-        return tinted
+        let cgImage = source.cgImage(forProposedRect: nil, context: nil, hints: nil)!
+        let w = cgImage.width
+        let h = cgImage.height
+        let rect = CGRect(x: 0, y: 0, width: w, height: h)
+        let ctx = CGContext(
+            data: nil,
+            width: w,
+            height: h,
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        )!
+        ctx.setFillColor(color.cgColor)
+        ctx.fill(rect)
+        ctx.setBlendMode(.destinationIn)
+        ctx.draw(cgImage, in: rect)
+        return NSImage(cgImage: ctx.makeImage()!, size: source.size)
     }
 
     private func setupMotion(frame: NSRect, isPreview: Bool) {
@@ -120,10 +131,7 @@ final class BouncingDVDView: ScreenSaverView {
 
         guard dt > 0, dt < 1.0 else { return }
 
-        let targetDt: CGFloat = 1.0 / 60.0
-        let scale = CGFloat(dt) / targetDt
-
-        let oldRect = NSRect(origin: logoPosition, size: logoSize)
+        let scale = CGFloat(dt) / Self.targetFrameInterval
 
         logoPosition.x += velocity.x * scale
         logoPosition.y += velocity.y * scale
@@ -151,16 +159,13 @@ final class BouncingDVDView: ScreenSaverView {
         }
 
         if hitEdge {
-            var next = Int.random(in: 0..<palette.count)
-            while next == colorIndex && palette.count > 1 {
-                next = Int.random(in: 0..<palette.count)
+            let n = palette.count
+            if n > 1 {
+                colorIndex = (colorIndex + 1 + Int.random(in: 0..<n - 1)) % n
             }
-            colorIndex = next
         }
 
-        let newRect = NSRect(origin: logoPosition, size: logoSize)
-        let dirtyRect = oldRect.union(newRect).insetBy(dx: -2, dy: -2)
-        setNeedsDisplay(dirtyRect)
+        setNeedsDisplay(bounds)
     }
 
     // MARK: - Configuration Sheet
