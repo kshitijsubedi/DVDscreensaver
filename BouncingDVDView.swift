@@ -136,33 +136,31 @@ final class BouncingDVDView: ScreenSaverView {
         logoPosition.x += velocity.x * scale
         logoPosition.y += velocity.y * scale
 
-        var hitEdge = false
+        var hitX = false
+        var hitY = false
 
         if logoPosition.x <= 0 {
             logoPosition.x = 0
             velocity.x = abs(velocity.x)
-            hitEdge = true
+            hitX = true
         } else if logoPosition.x + logoSize.width >= bounds.width {
             logoPosition.x = bounds.width - logoSize.width
             velocity.x = -abs(velocity.x)
-            hitEdge = true
+            hitX = true
         }
 
         if logoPosition.y <= 0 {
             logoPosition.y = 0
             velocity.y = abs(velocity.y)
-            hitEdge = true
+            hitY = true
         } else if logoPosition.y + logoSize.height >= bounds.height {
             logoPosition.y = bounds.height - logoSize.height
             velocity.y = -abs(velocity.y)
-            hitEdge = true
+            hitY = true
         }
 
-        if hitEdge {
-            let n = palette.count
-            if n > 1 {
-                colorIndex = (colorIndex + 1 + Int.random(in: 0..<n - 1)) % n
-            }
+        if hitX || hitY {
+            colorIndex = (colorIndex + 1) % palette.count
         }
 
         setNeedsDisplay(bounds)
